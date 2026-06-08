@@ -7,8 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY !
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='').split(',') if host.strip()]
 
 
 # Application definition
@@ -20,8 +20,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
+    # Third-party 
     'rest_framework',
+    'drf_spectacular',
+    # Local apps 
+    'users',
+
 ]
 
 MIDDLEWARE = [
@@ -105,3 +109,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# REST Framework Config
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Users CRUD API',
+    'DESCRIPTION': 'Task 01 - Backend Web Development Internship',
+    'VERSION': '1.0.0',
+}
